@@ -1,6 +1,10 @@
-import express,{Request,Response} from "express";
+import {config} from "dotenv";
+config();
+
 import mongoose from "mongoose";
-import Deck from "./models/Deck";
+import express,{Request,Response} from "express";
+import Sensor from "./models/Sensor";
+import User from "./models/User";
 
 const PORT = 5001;
 const app = express();
@@ -15,16 +19,38 @@ app.get("/hello", (req: Request, res: Response) => {
     res.send("hello ");
 });
 
-app.post("/decks", async (req:Request, res: Response) => {
-    const newDeck = new Deck({
-        title: req.body.title
+app.post("/sensors", async (req:Request, res: Response) => {
+    const newSensor = new Sensor({
+        temperature: req.body.temperature,
+        humidity: req.body.humidity,
+        ligthIntensity: req.body.ligthIntensity,
+        co2Level: req.body.co2Level
     })
-     const createdDeck = await newDeck.save();
-     res.json(createdDeck);
+    const createdSensor = await newSensor.save();
+    res.json(createdSensor);
 });
 
-mongoose.connect("mongodb+srv://flashcardsage:Ceo63MOQ1wdllFFH@cluster0.om99iyf.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0")
-.then( () => {
+app.post("/users", async (req:Request, res: Response) => {
+    const newUser = new User({
+        temperature: req.body.temperature,
+        humidity: req.body.humidity,
+        ligthIntensity: req.body.ligthIntensity,
+        co2Level: req.body.co2Level
+    })
+    const createdUser = await newUser.save();
+    res.json(createdUser);
+});
+
+app.post("/decks", async (req:Request, res: Response) => {
+    const newDeck = new User({
+        title: req.body
+    })
+    const createdDeck = await newDeck.save();
+    res.json(createdDeck);
+});
+
+
+mongoose.connect(process.env.MONGO_URL!).then( () => {
     app.listen(PORT);
 });
 
