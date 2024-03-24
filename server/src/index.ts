@@ -7,6 +7,9 @@ import Sensor from "./models/Sensor";
 import User from "./models/User";
 import cors from "cors";
 import Deck from "./models/Deck";
+import { getDecksController } from "./controllers/getDecksController";
+import { createDeckController } from "./controllers/createDeckController";
+import { deleteDeckController } from "./controllers/deleteDeckController";
 
 const PORT = 5001;
 const app = express();
@@ -17,24 +20,11 @@ app.use(cors({
 
 app.use(express.json());
 
-app.post("/decks", async (req:Request, res: Response) => {
-    const newDeck = new Deck({
-        title: req.body.title
-    })
-    const createdDeck = await newDeck.save();
-    res.json(createdDeck);
-});
+app.post("/decks", createDeckController);
 
-app.get("/decks", async (req:Request, res: Response) => {
-    const decks = await Deck.find();
-    res.json(decks);
-});
+app.get("/decks", getDecksController);
 
-app.delete("/decks/:deckId" , async (req:Request, res: Response) => {
-    const deckId = req.params.deckId;
-    const deck = await Deck.findByIdAndDelete(deckId);
-    res.json(deck);
-});
+app.delete("/decks/:deckId" ,deleteDeckController);
 
 
 mongoose.connect(process.env.MONGO_URL!).then( () => {
