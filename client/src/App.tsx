@@ -37,7 +37,10 @@ async function handleDeleteDeck(deckId:string) {
   }, []);
 
 
-  return (<div className="App">
+  return (
+  <div className='container'>
+    <div className="App">
+      <h1>Your Decks</h1>
     <ul className='decks'>
       {decks.map((deck) => (
         <li key={deck._id}>
@@ -60,6 +63,7 @@ async function handleDeleteDeck(deckId:string) {
           </button>
       </form>
     </div>
+  </div>
   );
 }
 
